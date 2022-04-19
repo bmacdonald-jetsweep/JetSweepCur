@@ -1,0 +1,99 @@
+{
+    "Parameters": {
+        "S3BucketName": {
+            "Type": "String"
+        },
+        "CurReportName": {
+            "Type": "String"
+        }
+    },
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "AWS CUR Inputs"
+                    },
+                    "Parameters": [
+                        "S3BucketName",
+                        "CurReportName"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "S3BucketName": {
+                    "default": "Enter a Name for the S3 Bucket to save the AWS CUR."
+                },
+                "CurReportName": {
+                    "default": "Enter a Name for the AWS CUR Report Name"
+                }
+            }
+        }
+    },
+    "Resources": {
+        "S3Bucket": {
+            "Type": "AWS::S3::Bucket",
+            "DeletionPolicy": "Delete",
+            "Description": "Create S3 Bucket for AWS CUR",
+            "Properties": {
+                "BucketName": {"Ref": "S3BucketName"}
+            }
+        },
+        "S3BucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "DeletionPolicy": "Delete",
+            "Description": "Create S3 Bucket Policy",
+            "Properties": {
+                "Bucket": {"Ref": "S3Bucket"},
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Action": [
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketPolicy"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": {"Fn::Sub": "arn:aws:s3:::${S3BucketName}"},
+                            "Principal": {
+                                "Service": "billingreports.amazonaws.com"
+                            }
+                        },
+                        {
+                            "Action": "s3:PutObject",
+                            "Effect": "Allow",
+                            "Resource": {"Fn::Sub": "arn:aws:s3:::${S3BucketName}/*"},
+                            "Principal": {
+                                "Service": "billingreports.amazonaws.com"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "Cur": {
+            "Type": "AWS::CUR::ReportDefinition",
+            "DependsOn": "S3BucketPolicy",
+            "DeletionPolicy": "Delete",
+            "Description": "Create AWS CUR",
+            "Properties": {
+                "AdditionalArtifacts": [
+                    "REDSHIFT"
+                ],
+                "AdditionalSchemaElements": [
+                    "RESOURCES"
+                ],
+                "Compression": "GZIP",
+                "Format": "textORcsv",
+                "RefreshClosedReports": "true",
+                "ReportName": {"Ref": "CurReportName"},
+                "ReportVersioning": "CREATE_NEW_REPORT",
+                "S3Bucket": {"Ref": "S3Bucket"},
+                "S3Prefix": "CUR",
+                "S3Region": {"Fn::Sub": "${AWS::Region}"},
+                "TimeUnit": "HOURLY"
+            }
+        }
+    }
+
+}
