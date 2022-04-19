@@ -1,9 +1,7 @@
 # JetSweep AWS Cost and Usage Report Configuration  
 
 ## About
-The AWS Cost and Usage Reports contain a comprehensive report of your costs and usages in your AWS Account. JetSweep
-has configured an AWS CloudFormation template that will configure an AWS Cost and Usage Report in the format that 
-JetSweep requires for data review.  The AWS Cost and Usage Reports require an AWS S3 Bucket as a destination to store
+The AWS Cost and Usage Reports contain a comprehensive report of your costs and usages in your AWS Account. JetSweep has configured an AWS CloudFormation template that will configure an AWS Cost and Usage Report in the format that will enable JetSweep to do a detailed analysis of your AWS Usage providing possible cost saving options. The AWS Cost and Usage Reports require an AWS S3 Bucket as a destination to store
 the AWS Cost and Usage Reports.  This CloudFormation template will configure a new S3 Bucket and configure the AWS
 Cost and Usage Report with the S3 Bucket as the report destination.   
 
