@@ -11,3 +11,6 @@ Cost and Usage Report with the S3 Bucket as the report destination.
 Sign into the AWS Management Console and click the button below to launch the `jetsweep-aws-cur.json` AWS 
 CloudFormation Template.  
 [![Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=JetSweepCUR&templateURL=https://jetsweep.s3.amazonaws.com/jetsweep-aws-cur.template)
+
+1.  Click Next on the AWS CloudFormation Create Stack page.  
+![Alt text](https://github.com/bmacdonald-jetsweep/JetSweepCur/images/cf-create-stack.png)
